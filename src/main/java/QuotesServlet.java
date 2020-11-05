@@ -12,16 +12,13 @@ public class QuotesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("quotes", quotesManager);
+        request.setAttribute("quotes", quotesManager.all());
         request.getRequestDispatcher("/quotes.jsp").forward(request, response);
         }
 
     @Override
     public void init(){
-        quotesManager = new ListQuotes();
+        quotesManager = QuotesDAOFactory.getQuotesManager();
     }
-
-
-
 
     }
