@@ -7,13 +7,15 @@ public class Demo {
     public static void main(String[] args) {
 
         long idToUpdate = 36;
+        Config config = new Config();
 
         try {
             DriverManager.registerDriver(new Driver());
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/codeup_test_db?serverTimezone=UTC&useSSL=false",
-                    "root",
-                    "codeup");
+                    config.getUrl(),
+                    config.getUser(),
+                    config.getPassword()
+            );
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM albums");
