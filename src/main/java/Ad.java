@@ -12,7 +12,7 @@ public class Ad {
         this.description = description;
     }
 
-    //INSERT STMT no user ID bc auto incrememnt is making it.
+    //INSERT STMT no user ID bc auto increment is making it.
     public Ad(long userId, String title, String description) {
         this.userId = userId;
         this.title = title;
