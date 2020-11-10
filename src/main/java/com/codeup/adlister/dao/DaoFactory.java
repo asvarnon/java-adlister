@@ -5,6 +5,7 @@ public class DaoFactory {
     private static Users usersDao;
     private static Config config = new Config();
 
+    //to check if this bridge already exists or not
     public static Ads getAdsDao() {
         if (adsDao == null) {
             adsDao = new MySQLAdsDao(config);
