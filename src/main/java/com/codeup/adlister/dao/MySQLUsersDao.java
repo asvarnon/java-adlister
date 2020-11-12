@@ -28,13 +28,13 @@ public class MySQLUsersDao implements Users {
         //GRAB FROM DATABASE, JAVA OBJECT CREATION
         String sql = "SELECT * FROM users WHERE username LIKE ?";
         String searchUsername = "%" + username + "%";
-        User user = null;
+        //if username is found, creates new user obj. if username is not found, just returns null
         try {
             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, username);
+            stmt.setString(1, searchUsername);
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                user = new User(
+            if(rs.next()){
+                return new User(
                         rs.getLong("id"),
                         rs.getString("username"),
                         rs.getString("email"),
@@ -42,9 +42,9 @@ public class MySQLUsersDao implements Users {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error finding a user by username", e);
         }
-        return user;
+        return null;
     }
 
     @Override
@@ -52,9 +52,14 @@ public class MySQLUsersDao implements Users {
         try {
             String sql = createInsertQuery(user);
             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPassword());
             stmt.executeUpdate();
+
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
+            //returning only first POSITION
             return rs.getLong(1);
         } catch (SQLException e) {
             throw new RuntimeException("Error creating a new user.", e);
